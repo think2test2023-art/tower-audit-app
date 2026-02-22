@@ -162,15 +162,23 @@ button:hover {
 <label>Smart Meter Reading</label>
 <input type="text" id="smartMeterReading">
 
+<label>Upload Photo (Optional)</label>
+<input type="file" id="photo">
+  
 <button type="submit">Submit Audit</button>
 </form>
 </div>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbw8b6YzuMVIgvbJkLfiYB8Safk_Afhp_S4M5ixJV8n72g4Ne8ihJTKsRfKqW-xy75Tu/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbw_YAa07uJF6W_GPQSZrOgzO39Msw_Y9NTtYqID2tEMQP7o42LEZXyt8m81S8_38F06/exec";
 
 document.getElementById("auditForm").addEventListener("submit", function(e) {
 e.preventDefault();
+
+navigator.geolocation.getCurrentPosition(function(position) {
+
+const latitude = position.coords.latitude;
+const longitude = position.coords.longitude;
 
 const data = {
 auditorName: auditorName.value,
@@ -191,7 +199,10 @@ dipStickType: dipStickType.value,
 meterNumber: meterNumber.value,
 meterReading: meterReading.value,
 smartMeterAvailable: document.querySelector('input[name="smartMeterAvailable"]:checked')?.value,
-smartMeterReading: smartMeterReading.value
+smartMeterReading: smartMeterReading.value,
+latitude: latitude,
+longitude: longitude,
+photoLink: ""
 };
 
 fetch(scriptURL, {
@@ -200,12 +211,11 @@ body: JSON.stringify(data)
 })
 .then(res => res.json())
 .then(response => {
-alert("Audit Submitted Successfully");
+alert("Audit Submitted Successfully with GPS");
 document.getElementById("auditForm").reset();
 })
 .catch(error => alert("Submission Failed"));
+
+});
 });
 </script>
-
-</body>
-</html>
