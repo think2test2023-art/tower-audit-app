@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Power & Fuel Audit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #2c3e50, #4ca1af);
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2c3e50;
+}
+
+.section-title {
+  margin-top: 30px;
+  font-weight: bold;
+  color: #1f78d1;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.radio-group {
+  margin-top: 5px;
+}
+
+button {
+  margin-top: 30px;
+  width: 100%;
+  padding: 15px;
+  background: #1f78d1;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #155a9c;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>Power & Fuel Audit – Tower Visit</h2>
+
+<form id="auditForm">
+
+<div class="section-title">Basic Information</div>
+
+<label>Auditor Name</label>
+<input type="text" id="auditorName" required>
+
+<label>Tower ID</label>
+<input type="text" id="towerId" required>
+
+<label>Site Status</label>
+<select id="siteStatus">
+<option>Active</option>
+<option>Inactive</option>
+<option>Dismantled</option>
+</select>
+
+<label>Tenant Count</label>
+<input type="number" id="tenantCount">
+
+<label>Tenant Names</label>
+<input type="text" id="tenantNames">
+
+<div class="section-title">Genset Details</div>
+
+<label>Genset Availability</label>
+<div class="radio-group">
+<input type="radio" name="gensetAvailable" value="Available"> Available
+<input type="radio" name="gensetAvailable" value="Not Available"> Not Available
+</div>
+
+<label>Genset Status</label>
+<select id="gensetStatus">
+<option>Running</option>
+<option>Not Used</option>
+<option>Damaged/Faulty</option>
+</select>
+
+<label>Genset Make</label>
+<input type="text" id="gensetMake">
+
+<label>Genset Type</label>
+<input type="text" id="gensetType">
+
+<label>Genset KVA</label>
+<input type="text" id="gensetKva">
+
+<label>Hour Meter Reading</label>
+<input type="text" id="hourMeter">
+
+<label>Fuel Tank Capacity</label>
+<input type="text" id="fuelTankCapacity">
+
+<label>Actual Fuel</label>
+<input type="text" id="actualFuel">
+
+<div class="section-title">Meter & Fuel Control</div>
+
+<label>Dip Stick Availability</label>
+<div class="radio-group">
+<input type="radio" name="dipStickAvailable" value="Available"> Available
+<input type="radio" name="dipStickAvailable" value="Not Available"> Not Available
+</div>
+
+<label>Dip Stick Type</label>
+<select id="dipStickType">
+<option>Original</option>
+<option>Wooden</option>
+<option>Metal Stick</option>
+<option>Other</option>
+</select>
+
+<label>Electricity Meter Number</label>
+<input type="text" id="meterNumber">
+
+<label>Electricity Meter Reading</label>
+<input type="text" id="meterReading">
+
+<label>Smart Meter Availability</label>
+<div class="radio-group">
+<input type="radio" name="smartMeterAvailable" value="Available"> Available
+<input type="radio" name="smartMeterAvailable" value="Not Available"> Not Available
+</div>
+
+<label>Smart Meter Reading</label>
+<input type="text" id="smartMeterReading">
+
+<button type="submit">Submit Audit</button>
+</form>
+</div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbw8b6YzuMVIgvbJkLfiYB8Safk_Afhp_S4M5ixJV8n72g4Ne8ihJTKsRfKqW-xy75Tu/exec";
+
+document.getElementById("auditForm").addEventListener("submit", function(e) {
+e.preventDefault();
+
+const data = {
+auditorName: auditorName.value,
+towerId: towerId.value,
+siteStatus: siteStatus.value,
+tenantCount: tenantCount.value,
+tenantNames: tenantNames.value,
+gensetAvailable: document.querySelector('input[name="gensetAvailable"]:checked')?.value,
+gensetStatus: gensetStatus.value,
+gensetMake: gensetMake.value,
+gensetType: gensetType.value,
+gensetKva: gensetKva.value,
+hourMeter: hourMeter.value,
+fuelTankCapacity: fuelTankCapacity.value,
+actualFuel: actualFuel.value,
+dipStickAvailable: document.querySelector('input[name="dipStickAvailable"]:checked')?.value,
+dipStickType: dipStickType.value,
+meterNumber: meterNumber.value,
+meterReading: meterReading.value,
+smartMeterAvailable: document.querySelector('input[name="smartMeterAvailable"]:checked')?.value,
+smartMeterReading: smartMeterReading.value
+};
+
+fetch(scriptURL, {
+method: "POST",
+body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(response => {
+alert("Audit Submitted Successfully");
+document.getElementById("auditForm").reset();
+})
+.catch(error => alert("Submission Failed"));
+});
+</script>
+
+</body>
+</html>
